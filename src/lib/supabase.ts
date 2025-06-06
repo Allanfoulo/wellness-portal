@@ -1,11 +1,4 @@
 
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = 'https://your-project.supabase.co';
-const supabaseKey = 'your-anon-key';
-
-export const supabase = createClient(supabaseUrl, supabaseKey);
-
 // Demo data for the application
 export const demoServices = [
   {
@@ -74,5 +67,29 @@ export const demoCredentials = {
     email: 'user@elysian.com',
     password: 'user123',
     role: 'user'
+  }
+};
+
+// Mock user data
+export const mockUsers = {
+  'admin@elysian.com': {
+    id: '1',
+    email: 'admin@elysian.com',
+    full_name: 'Admin User',
+    phone: '(555) 123-4567',
+    birthday: '1990-01-01',
+    medical_notes: 'No known allergies',
+    emergency_contact: 'Jane Doe - (555) 987-6543',
+    role: 'admin' as const
+  },
+  'user@elysian.com': {
+    id: '2',
+    email: 'user@elysian.com',
+    full_name: 'Demo User',
+    phone: '(555) 234-5678',
+    birthday: '1985-05-15',
+    medical_notes: 'Prefers gentle pressure for massages',
+    emergency_contact: 'John Smith - (555) 876-5432',
+    role: 'user' as const
   }
 };
