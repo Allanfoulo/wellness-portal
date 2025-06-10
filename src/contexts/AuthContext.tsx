@@ -54,7 +54,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return null;
       }
 
-      return data;
+      // Type assertion to ensure role is properly typed
+      return {
+        ...data,
+        role: data.role as 'admin' | 'user'
+      } as Profile;
     } catch (error) {
       console.error('Error fetching profile:', error);
       return null;
@@ -194,7 +198,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { error: error.message };
       }
 
-      setProfile(data);
+      // Type assertion for the updated profile data
+      setProfile({
+        ...data,
+        role: data.role as 'admin' | 'user'
+      } as Profile);
       toast.success('Profile updated successfully');
       return {};
     } catch (error) {
