@@ -1,5 +1,36 @@
+import { supabase } from '@/integrations/supabase/client';
 
-// Demo data for the application
+// Fetch services from the database
+export const fetchServices = async () => {
+  const { data, error } = await supabase
+    .from('services')
+    .select('*')
+    .eq('is_active', true)
+    .order('name');
+
+  if (error) {
+    console.error('Error fetching services:', error);
+    return [];
+  }
+
+  return data || [];
+};
+
+// Demo credentials for testing (can be removed once real authentication is working)
+export const demoCredentials = {
+  admin: {
+    email: 'admin@elysian.com',
+    password: 'admin123',
+    role: 'admin'
+  },
+  user: {
+    email: 'user@elysian.com',
+    password: 'user123',
+    role: 'user'
+  }
+};
+
+// Demo data for fallback (keeping for backward compatibility)
 export const demoServices = [
   {
     id: 1,
@@ -57,20 +88,7 @@ export const demoServices = [
   }
 ];
 
-export const demoCredentials = {
-  admin: {
-    email: 'admin@elysian.com',
-    password: 'admin123',
-    role: 'admin'
-  },
-  user: {
-    email: 'user@elysian.com',
-    password: 'user123',
-    role: 'user'
-  }
-};
-
-// Mock user data
+// Mock user data (keeping for backward compatibility)
 export const mockUsers = {
   'admin@elysian.com': {
     id: '1',
