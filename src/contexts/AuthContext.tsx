@@ -43,6 +43,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchProfile = async (userId: string) => {
     try {
+      console.log('Fetching profile for user:', userId);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -54,6 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return null;
       }
 
+      console.log('Profile fetched successfully:', data);
       // Type assertion to ensure role is properly typed
       return {
         ...data,
@@ -184,9 +186,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateProfile = async (updates: Partial<Profile>) => {
-    if (!user || !profile) return { error: 'Not authenticated' };
+    console.log('updateProfile called with:', updates);
+    console.log('Current user:', user);
+    console.log('Current session:', session);
+    console.log('Current profile:', profile);
+
+    if (!user || !session) {
+      console.error('No authenticated user or session');
+      return { error: 'Not authenticated - please sign in again' };
+    }
+
+    if (!profile) {
+      console.error('No profile found');
+      return { error: 'Profile not found - please refresh and try again' };
+    }
 
     try {
+      console.log('Attempting to update profile with data:', updates);
       const { data, error } = await supabase
         .from('profiles')
         .update(updates)
@@ -195,17 +211,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .single();
 
       if (error) {
+        console.error('Supabase update error:', error);
         return { error: error.message };
       }
 
+      console.log('Profile updated successfully:', data);
       // Type assertion for the updated profile data
       setProfile({
         ...data,
         role: data.role as 'admin' | 'user'
       } as Profile);
-      toast.success('Profile updated successfully');
+      
       return {};
     } catch (error) {
+      console.error('Unexpected error during profile update:', error);
       return { error: 'An unexpected error occurred' };
     }
   };
