@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Header } from '@/components/Header';
@@ -16,6 +15,7 @@ import {
   Settings,
   BarChart3
 } from 'lucide-react';
+import { AdminAppointmentManagement } from '@/components/admin/AdminAppointmentManagement';
 
 const AdminDashboard = () => {
   const { profile } = useAuth();
@@ -27,39 +27,6 @@ const AdminDashboard = () => {
     activeClients: 156,
     avgRating: 4.8,
   };
-
-  const recentAppointments = [
-    {
-      id: 1,
-      client: 'Emma Johnson',
-      service: 'Therapeutic Massage',
-      date: '2024-06-08',
-      time: '10:00 AM',
-      practitioner: 'Dr. Sarah Chen',
-      status: 'confirmed',
-      revenue: 120,
-    },
-    {
-      id: 2,
-      client: 'Michael Brown',
-      service: 'Acupuncture Session',
-      date: '2024-06-08',
-      time: '11:30 AM',
-      practitioner: 'Dr. Michael Torres',
-      status: 'completed',
-      revenue: 90,
-    },
-    {
-      id: 3,
-      client: 'Sarah Davis',
-      service: 'Meditation & Mindfulness',
-      date: '2024-06-08',
-      time: '2:00 PM',
-      practitioner: 'Lisa Rodriguez',
-      status: 'confirmed',
-      revenue: 60,
-    },
-  ];
 
   const practitioners = [
     {
@@ -87,21 +54,6 @@ const AdminDashboard = () => {
       revenue: 900,
     },
   ];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'confirmed':
-        return 'bg-green-100 text-green-700';
-      case 'completed':
-        return 'bg-blue-100 text-blue-700';
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-700';
-      case 'cancelled':
-        return 'bg-red-100 text-red-700';
-      default:
-        return 'bg-gray-100 text-gray-700';
-    }
-  };
 
   return (
     <div className="min-h-screen bg-luxury-gradient">
@@ -196,52 +148,8 @@ const AdminDashboard = () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="appointments" className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-playfair font-semibold text-charcoal-800">
-                Recent Appointments
-              </h2>
-              <Button className="luxury-button">
-                <Calendar className="w-4 h-4 mr-2" />
-                Schedule New
-              </Button>
-            </div>
-
-            <div className="grid gap-4">
-              {recentAppointments.map((appointment, index) => (
-                <Card 
-                  key={appointment.id} 
-                  className={`luxury-card animate-slide-in-left animation-delay-${index * 200}`}
-                >
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="font-playfair text-lg font-semibold text-charcoal-800">
-                          {appointment.client}
-                        </h3>
-                        <p className="text-charcoal-600">{appointment.service}</p>
-                      </div>
-                      <Badge className={getStatusColor(appointment.status)}>
-                        {appointment.status}
-                      </Badge>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-charcoal-600">
-                      <div className="flex items-center">
-                        <Calendar className="w-4 h-4 mr-2 text-lavender-600" />
-                        {new Date(appointment.date).toLocaleDateString()}
-                      </div>
-                      <div className="flex items-center">
-                        <Clock className="w-4 h-4 mr-2 text-lavender-600" />
-                        {appointment.time}
-                      </div>
-                      <div>{appointment.practitioner}</div>
-                      <div className="font-semibold">${appointment.revenue}</div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+          <TabsContent value="appointments">
+            <AdminAppointmentManagement />
           </TabsContent>
 
           <TabsContent value="practitioners" className="space-y-6">
