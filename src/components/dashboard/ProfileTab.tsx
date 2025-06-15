@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -7,10 +6,13 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { User, Phone, Mail, Calendar, Heart, AlertCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export const ProfileTab = () => {
   const { profile, updateProfile } = useAuth();
+  const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [profileData, setProfileData] = useState({
     full_name: profile?.full_name || '',
     phone: profile?.phone || '',
@@ -21,12 +23,53 @@ export const ProfileTab = () => {
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { error } = await updateProfile(profileData);
+    setIsLoading(true);
     
-    if (!error) {
-      setIsEditing(false);
+    // Show loading toast
+    toast({
+      title: "Saving changes...",
+      description: "Your profile is being updated.",
+    });
+
+    try {
+      const { error } = await updateProfile(profileData);
+      
+      if (!error) {
+        setIsEditing(false);
+        toast({
+          title: "Profile updated successfully!",
+          description: "Your changes have been saved.",
+        });
+      } else {
+        toast({
+          title: "Error updating profile",
+          description: error,
+          variant: "destructive",
+        });
+      }
+    } catch (err) {
+      toast({
+        title: "Error updating profile",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  // Update local state when profile changes
+  useState(() => {
+    if (profile) {
+      setProfileData({
+        full_name: profile.full_name || '',
+        phone: profile.phone || '',
+        birthday: profile.birthday || '',
+        medical_notes: profile.medical_notes || '',
+        emergency_contact: profile.emergency_contact || '',
+      });
+    }
+  });
 
   return (
     <div className="space-y-6">
@@ -114,13 +157,18 @@ export const ProfileTab = () => {
               </div>
 
               <div className="flex gap-3">
-                <Button type="submit" className="luxury-button">
-                  Save Changes
+                <Button 
+                  type="submit" 
+                  className="luxury-button"
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Saving...' : 'Save Changes'}
                 </Button>
                 <Button 
                   type="button" 
                   variant="outline"
                   onClick={() => setIsEditing(false)}
+                  disabled={isLoading}
                 >
                   Cancel
                 </Button>
