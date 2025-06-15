@@ -16,6 +16,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { AdminAppointmentManagement } from '@/components/admin/AdminAppointmentManagement';
+import { AdminAnalytics } from '@/components/admin/AdminAnalytics';
 
 const AdminDashboard = () => {
   const { profile } = useAuth();
@@ -134,13 +135,13 @@ const AdminDashboard = () => {
               <Calendar className="w-4 h-4 mr-2" />
               Appointments
             </TabsTrigger>
-            <TabsTrigger value="practitioners" className="data-[state=active]:bg-white">
-              <Users className="w-4 h-4 mr-2" />
-              Practitioners
-            </TabsTrigger>
             <TabsTrigger value="analytics" className="data-[state=active]:bg-white">
               <BarChart3 className="w-4 h-4 mr-2" />
               Analytics
+            </TabsTrigger>
+            <TabsTrigger value="practitioners" className="data-[state=active]:bg-white">
+              <Users className="w-4 h-4 mr-2" />
+              Practitioners
             </TabsTrigger>
             <TabsTrigger value="settings" className="data-[state=active]:bg-white">
               <Settings className="w-4 h-4 mr-2" />
@@ -152,7 +153,12 @@ const AdminDashboard = () => {
             <AdminAppointmentManagement />
           </TabsContent>
 
+          <TabsContent value="analytics">
+            <AdminAnalytics />
+          </TabsContent>
+
           <TabsContent value="practitioners" className="space-y-6">
+            
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-playfair font-semibold text-charcoal-800">
                 Practitioner Performance
@@ -205,49 +211,8 @@ const AdminDashboard = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="analytics" className="space-y-6">
-            <h2 className="text-2xl font-playfair font-semibold text-charcoal-800">
-              Analytics & Reports
-            </h2>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="luxury-card">
-                <CardHeader>
-                  <CardTitle className="font-playfair flex items-center">
-                    <TrendingUp className="w-5 h-5 mr-2 text-lavender-600" />
-                    Revenue Trends
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-64 flex items-center justify-center text-charcoal-600">
-                    <div className="text-center">
-                      <BarChart3 className="w-16 h-16 mx-auto mb-4 text-lavender-400" />
-                      <p>Revenue analytics chart would be displayed here</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="luxury-card">
-                <CardHeader>
-                  <CardTitle className="font-playfair flex items-center">
-                    <Calendar className="w-5 h-5 mr-2 text-lavender-600" />
-                    Appointment Analytics
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-64 flex items-center justify-center text-charcoal-600">
-                    <div className="text-center">
-                      <Calendar className="w-16 h-16 mx-auto mb-4 text-lavender-400" />
-                      <p>Appointment analytics chart would be displayed here</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
           <TabsContent value="settings" className="space-y-6">
+            
             <h2 className="text-2xl font-playfair font-semibold text-charcoal-800">
               Clinic Settings
             </h2>
